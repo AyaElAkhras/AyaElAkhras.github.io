@@ -1,0 +1,980 @@
+---
+import '../styles/global.css';
+import { execFileSync } from 'node:child_process';
+
+// Automatically determine the last update date from Git.
+// Fall back to the build date if Git information is unavailable.
+let lastUpdated = new Date();
+
+try {
+  const gitDate = execFileSync('git', ['log', '-1', '--format=%cI'], {
+    encoding: 'utf8'
+  }).trim();
+
+  if (gitDate) {
+    const parsedDate = new Date(gitDate);
+
+    if (!Number.isNaN(parsedDate.getTime())) {
+      lastUpdated = parsedDate;
+    }
+  }
+} catch {
+  // Git information is unavailable; use the build date instead.
+}
+
+const formattedDate = lastUpdated.toLocaleDateString('en-US', {
+  month: 'long',
+  year: 'numeric',
+});
+
+// Selected peer-reviewed publications, based on the CV.
+const publications = [
+  {
+    year: '2026',
+    title: 'Graphiti: Formally Verified Out-of-Order Execution in Dataflow Circuits',
+    authors: 'Y. Herklotz, A. Elakhras, M. Camaioni, P. Ienne, L. Josipović, T. Bourgeat',
+    venue: 'ASPLOS 2026',
+    recognition: 'Best Paper Honorable Mention',
+    url: 'https://doi.org/10.1145/3779212.3790166'
+  },
+  {
+    year: '2026',
+    title: 'Out with LSQs: Custom Circuits for Memory Access Reordering in Dynamic HLS',
+    authors: 'R. Piryadi, A. Elakhras, M. Stojilović, P. Ienne',
+    venue: 'FPGA 2026',
+    recognition: 'Best Paper Award Runner-up',
+    url: 'https://doi.org/10.1145/3748173.3779204'
+  },
+  {
+    year: '2025',
+    title: 'ElasticMiter: Formally Verified Dataflow Circuit Rewrites',
+    authors: 'A. Elakhras*, J. Xu*, M. Erhart, P. Ienne, L. Josipović',
+    venue: 'ASPLOS 2025',
+    recognition: '* Equal contribution',
+    url: 'https://doi.org/10.1145/3676641.3715993'
+  },
+  {
+    year: '2024',
+    title: 'Survival of the Fastest: Enabling More Out-of-Order Execution in Dataflow Circuits',
+    authors: 'A. Elakhras, A. Guerrieri, L. Josipović, P. Ienne',
+    venue: 'FPGA 2024',
+    recognition: '',
+    url: 'https://doi.org/10.1145/3626202.3637556'
+  },
+  {
+    year: '2023',
+    title: 'Straight to the Queue: Fast Load-Store Queue Allocation in Dataflow Circuits',
+    authors: 'A. Elakhras, R. Sawhney, A. Guerrieri, L. Josipović, P. Ienne',
+    venue: 'FPGA 2023',
+    recognition: '',
+    url: 'https://doi.org/10.1145/3543622.3573050'
+  },
+  {
+    year: '2022',
+    title: 'Unleashing Parallelism in Elastic Circuits with Faster Token Delivery',
+    authors: 'A. Elakhras, A. Guerrieri, L. Josipović, P. Ienne',
+    venue: 'FPL 2022',
+    recognition: 'Best Paper Award Nominee',
+    url: 'https://doi.org/10.1109/FPL57034.2022.00046'
+  }
+];
+
+// Teaching, supervision, talks and professional service from the latest CV.
+const studentProjects = [
+  { period: '2025–2026', name: 'Yuan Qin', role: 'M.Sc. thesis', detail: 'Improved the robustness of Fast Token Delivery by using Binary Decision Diagrams (BDDs) to represent complex control flow decisions.' },
+  { period: '2025', name: 'Zeinab Pourgheisari', role: 'Three-month internship', detail: 'Extended the Gated Single Assignment MLIR library to support loops with multiple exits.' },
+  { period: '2024–2025', name: 'Giacomo Sansone', role: 'M.Sc. thesis', detail: 'Studied where out-of-order execution is beneficial and implemented Fast Token Delivery in MLIR.' },
+  { period: '2024–2025', name: 'Dana Kossaybati', role: 'Six-month internship', detail: 'Automated tagged-component generation and implemented an MLIR transformation for out-of-order execution.' },
+  { period: '2024', name: 'Anushka Allawadi', role: 'One-month internship', detail: 'Implemented an MLIR pattern-matching rewriter for dataflow circuit optimization.' },
+  { period: '2023', name: 'Teodor Cvijović', role: 'Two-month internship', detail: 'Implemented a control-dependence analysis pass in MLIR.' },
+  { period: '2023', name: 'Ahmed Salem', role: 'Three-month internship', detail: 'Experimented with a VHDL library of tagged dataflow components.' },
+  { period: '2023', name: 'Gianluca Radi', role: 'Semester project', detail: 'Implemented loop disordering and extended circuit interfaces to support multithreading.' },
+  { period: '2022', name: 'Riya Sawhney', role: 'Two-month internship', detail: 'Researched a load–store queue interface to exploit dataflow parallelism.' }
+];
+
+const talks = [
+  { date: 'February 2026', title: 'Custom Dataflow Circuits for Memory Access Reordering', venue: 'Google · Sunnyvale, California', links: [] },
+  { date: 'October 2025', title: 'Dynamically Scheduled High-Level Synthesis', venue: 'American University in Cairo', links: [] },
+  { date: 'August 2025', title: 'Challenges in Reasoning about Dataflow Circuits', venue: 'Synopsys visit to EPFL', links: [] },
+  { date: 'April 2024', title: 'Design Space Exploration for AI Engines', venue: 'AMD · End-of-internship technical talk', links: [] }
+];
+
+// Recent news
+// Each entry supports an optional bold heading and multiple links.
+// IMPORTANT: Links under /presentations/ are templates. Place corresponding PDFs
+// in public/presentations/ before publishing, or remove unavailable links.
+const news = [
+  {
+    date: 'November 2026',
+    heading: '',
+    text: 'Joining Huawei Zürich Research Center as a Senior Researcher.',
+    links: []
+  },
+  {
+    date: 'September 2026',
+    heading: '',
+    text: 'Received my Ph.D. in Computer and Communication Sciences from EPFL.',
+    links: [
+    ]
+  },
+  {
+    date: 'August 2026',
+    heading: '',
+    text: 'Successfully completed my public Ph.D. defense at EPFL.',
+    links: [
+      {
+        label: 'Ph.D. Thesis',
+        url: 'https://doi.org/10.5075/epfl-thesis-10946'
+      },
+      {
+        label: 'Public Defense Slides',
+        url: '/presentations/phd-public-defense.pdf'
+      }
+    ]
+  },
+  {
+    date: 'June 2026',
+    heading: '',
+    text: 'Passed my Ph.D. private oral examination at EPFL unconditionally.',
+    links: [
+      {
+        label: 'Private Defense Slides',
+        url: '/presentations/phd-private-defense.pdf'
+      }
+    ]
+  },
+  {
+    date: 'March 2026',
+    heading: 'Best Paper Honorable Mention at ASPLOS’26!',
+    text: 'Our paper "Graphiti: Formally Verified Out-of-Order Execution in Dataflow Circuits" received a Best Paper Honorable Mention.',
+    links: [
+      {
+        label: 'Paper',
+        url: 'https://doi.org/10.1145/3779212.3790166'
+      },
+      {
+        label: 'Award Announcement',
+        url: 'https://www.asplos-conference.org/asplos2026/awards/'
+      },
+      {
+        label: 'Graphiti Slides',
+        url: '/presentations/graphiti-asplos26.pdf'
+      }
+    ]
+  },
+  {
+    date: 'February 2026',
+    heading: 'Best Paper Runner-up at FPGA’26!',
+    text: 'Presented our paper "Out with LSQs: Custom Circuits for Memory Access Reordering in Dynamic HLS" at FPGA’26 in Seaside, California, where it received the Best Paper Runner-up recognition.',
+    links: [
+      {
+        label: 'Paper',
+        url: 'https://doi.org/10.1145/3748173.3779204'
+      },
+      {
+        label: 'Award Announcement',
+        url: 'https://isfpga.org/past/fpga2026/program/'
+      },
+      {
+        label: 'Out with LSQs Slides',
+        url: '/presentations/out-with-lsqs-fpga26.pdf'
+      }
+    ]
+  },
+  {
+    date: 'April 2025',
+    heading: '',
+    text: 'Presented our paper "ElasticMiter: Formally Verified Dataflow Circuit Rewrites" at ASPLOS’25 in Rotterdam, the Netherlands.',
+    links: [
+      {
+        label: 'Paper',
+        url: 'https://doi.org/10.1145/3676641.3715993'
+      },
+      {
+        label: 'ElasticMiter Slides',
+        url: '/presentations/elasticmiter-asplos25.pdf'
+      }
+    ]
+  },
+  {
+    date: 'September 2024',
+    heading: 'Google Ph.D. Fellowship!',
+    text: 'Awarded the Google Ph.D. Fellowship for exceptional doctoral research in Distributed Systems and Parallel Computing.',
+    links: [
+      {
+        label: 'Google Fellows Announcement',
+        url: 'https://research.google/programs-and-events/phd-fellowship/recipients/'
+      }
+    ]
+  },
+  {
+    date: 'March 2024',
+    heading: '',
+    text: 'Completed my research internship at AMD in Longmont, Colorado.',
+    links: []
+  },
+  {
+    date: 'February 2024',
+    heading: '',
+    text: 'Presented our paper "Survival of the Fastest" at FPGA’24 in Monterey, California.',
+    links: [
+      {
+        label: 'Paper',
+        url: 'https://doi.org/10.1145/3626202.3637556'
+      },
+      {
+        label: 'Survival of the Fastest Slides',
+        url: '/presentations/survival-of-the-fastest-fpga24.pdf'
+      }
+    ]
+  },
+  {
+    date: 'October 2023',
+    heading: '',
+    text: 'Started my research internship at AMD in Longmont, Colorado.',
+    links: []
+  },
+  {
+    date: 'February 2023',
+    heading: '',
+    text: 'Presented our paper "Straight to the Queue" at FPGA’23 in Monterey, California.',
+    links: [
+      {
+        label: 'Paper',
+        url: 'https://doi.org/10.1145/3543622.3573050'
+      },
+      {
+        label: 'Straight to the Queue Slides',
+        url: '/presentations/straight-to-the-queue-fpga23.pdf'
+      }
+    ]
+  },
+  {
+    date: 'September 2022',
+    heading: 'Best Paper Award Nomination at FPL’22!',
+    text: 'Presented our paper "Unleashing Parallelism in Elastic Circuits with Faster Token Delivery" at FPL’22 in Belfast, Northern Ireland, where it was nominated for the Best Paper Award.',
+    links: [
+      {
+        label: 'Paper',
+        url: 'https://doi.org/10.1109/FPL57034.2022.00046'
+      },
+      {
+        label: 'Award Announcement',
+        url: 'https://2022.fpl.org/bestpaper/'
+      },
+      {
+        label: 'Fast Token Delivery Slides',
+        url: '/presentations/fast-token-delivery-fpl22.pdf'
+      }
+    ]
+  },
+  {
+    date: 'October 2020',
+    heading: 'EDIC Fellowship!',
+    text: 'Started my Ph.D. in Computer and Communication Sciences at EPFL and was awarded the EDIC Fellowship for incoming Ph.D. students with an exceptional academic record.',
+    links: []
+  }
+];
+---
+
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Academic and research portfolio of Ayatallah (Aya) Elakhras."
+    />
+    <title>Ayatallah (Aya) Elakhras · Researcher</title>
+
+    <script is:inline>
+      try {
+        const savedTheme = localStorage.getItem('portfolio-theme');
+        document.documentElement.dataset.theme = savedTheme === 'dark' || savedTheme === 'light'
+          ? savedTheme
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      } catch {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
+    <style>
+      /* Self-contained tab and theme styling; no changes to global.css needed. */
+      :root {
+        color-scheme: light;
+        --portfolio-bg: #fff;
+        --portfolio-text: #20252d;
+        --portfolio-muted: #5d6570;
+        --portfolio-border: #dce1e6;
+        --portfolio-hover: #f2f4f7;
+        --portfolio-link: #205a91;
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --portfolio-bg: #181a1d;
+        --portfolio-text: #f0efed;
+        --portfolio-muted: #bcbec2;
+        --portfolio-border: #45474b;
+        --portfolio-hover: #2a2c30;
+        --portfolio-link: #d6dadd;
+      }
+      /* Warm, neutral dark mode; override any fixed colors in global.css. */
+      :root[data-theme="dark"] .hero-copy .lead {
+        color: #d0d1d3 !important;
+        opacity: 1 !important;
+      }
+      :root[data-theme="dark"] .hero-copy .eyebrow {
+        color: #aeb3b9 !important;
+        opacity: 1 !important;
+      }
+      :root[data-theme="dark"] .hero-copy h1 { color: #faf9f7 !important; }
+      :root[data-theme="dark"] .portfolio-tabs button {
+        color: #c6c9ce !important;
+        background: transparent !important;
+      }
+      :root[data-theme="dark"] .portfolio-tabs button[aria-selected="true"] {
+        color: #ffffff !important;
+        background: #34363a !important;
+        border-color: #5b5d61 !important;
+      }
+      :root[data-theme="dark"] .portfolio-tabs button:hover {
+        color: #ffffff !important;
+        background: #303236 !important;
+      }
+      :root[data-theme="dark"] .links a,
+      :root[data-theme="dark"] .news-link {
+        color: #e0e2e4 !important;
+        background: #24262a !important;
+        border-color: #4b4d51 !important;
+      }
+      :root[data-theme="dark"] .links a:hover,
+      :root[data-theme="dark"] .news-link:hover {
+        background: #34363a !important;
+        border-color: #777a7f !important;
+      }
+      html { background-color: var(--portfolio-bg); }
+      body, header, main, footer, section {
+        background-color: var(--portfolio-bg) !important;
+        color: var(--portfolio-text) !important;
+      }
+      body { transition: background-color .15s ease, color .15s ease; }
+      .muted, .item-meta, .news-date { color: var(--portfolio-muted) !important; }
+      a { color: var(--portfolio-link); }
+      header, footer, .item, .news-row { border-color: var(--portfolio-border) !important; }
+      .tab-panel[hidden] { display: none !important; }
+      .portfolio-tabs { display: flex; gap: .3rem; flex-wrap: wrap; align-items: center; }
+      .portfolio-tabs button, .theme-toggle {
+        background: transparent; color: var(--portfolio-text); cursor: pointer;
+        font: inherit; font-size: .88rem; border: 1px solid transparent;
+        border-radius: 7px; padding: .5rem .65rem;
+      }
+      .portfolio-tabs button:hover, .theme-toggle:hover { background: var(--portfolio-hover); }
+      .portfolio-tabs button[aria-selected="true"] {
+        font-weight: 700; border-color: var(--portfolio-border);
+        background: var(--portfolio-hover);
+      }
+      .portfolio-tabs button:focus-visible, .theme-toggle:focus-visible {
+        outline: 2px solid var(--portfolio-link); outline-offset: 2px;
+      }
+      .theme-toggle { white-space: nowrap; border-color: var(--portfolio-border); }
+      .nav { gap: .75rem; flex-wrap: wrap; }
+      .nav .portfolio-tabs { flex: 1 1 350px; }
+      .items > h3 { margin-top: 1.2rem; }
+      .news-link, .tag, .links a { color: var(--portfolio-link) !important; border-color: var(--portfolio-border) !important; }
+      .news-link:hover, .links a:hover { background: var(--portfolio-hover) !important; }
+      .hero-copy { min-width: 0; }
+      /* Align the photo with the top of the introduction rather than centering it. */
+      .hero { align-items: flex-start !important; }
+      .profile-photo { align-self: flex-start !important; margin-top: 0 !important; }
+      .hero-copy .links { margin-top: .65rem; margin-bottom: 1.4rem; }
+      .hero-copy .lead p { margin: 0 0 1rem; line-height: 1.7; }
+      .research-highlights { list-style: disc; padding-left: 1.4rem; margin: .8rem 0 1.2rem; }
+      .research-highlights li { margin-bottom: .65rem; line-height: 1.65; }
+      :root[data-theme="dark"] .research-highlights { color: #d0d1d3; }
+      .hero-copy h1 { font-size: clamp(1.35rem, 3.5vw, 2.25rem) !important; }
+      @media (max-width: 650px) {
+        .nav .brand { width: 100%; }
+        .portfolio-tabs button { padding: .45rem .55rem; }
+        .hero-copy h1 { white-space: normal !important; }
+      }
+
+      /* Continuous, scrollable page with anchor navigation. */
+      html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+      section[id] { scroll-margin-top: 5.5rem; }
+      .tab-panel[hidden] { display: block !important; }
+      .portfolio-tabs a {
+        display: inline-flex; align-items: center; text-decoration: none;
+        font: inherit; font-size: .88rem; padding: .5rem .65rem;
+        border: 1px solid transparent; border-radius: 7px;
+        color: var(--portfolio-text) !important;
+      }
+      .portfolio-tabs a:hover, .portfolio-tabs a:focus-visible {
+        background: var(--portfolio-hover); border-color: var(--portfolio-border);
+      }
+      :root[data-theme="dark"] .portfolio-tabs a { color: #c6c9ce !important; }
+      :root[data-theme="dark"] .portfolio-tabs a:hover,
+      :root[data-theme="dark"] .portfolio-tabs a:focus-visible {
+        color: #fff !important; background: #34363a !important;
+      }
+      /* Two-column introduction: photo is alongside and top-aligned with the name. */
+      .hero { display: block !important; }
+      .hero-copy {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 205px;
+        column-gap: clamp(1rem, 3vw, 2rem);
+        width: 100%;
+        max-width: none;
+        align-items: start;
+      }
+      .hero-copy > h1 { grid-column: 1; grid-row: 1; min-width: 0; }
+      .hero-copy > .links { grid-column: 1; grid-row: 2; min-width: 0; }
+      .hero-copy > .eyebrow { grid-column: 1; grid-row: 3; min-width: 0; }
+      .hero-copy > .intro-row { grid-column: 1; grid-row: 4; min-width: 0; }
+      .hero-copy > .profile-photo {
+        grid-column: 2;
+        grid-row: 1 / 5;
+        justify-self: end;
+        align-self: start !important;
+        width: 205px !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .hero-copy > .profile-photo img {
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain;
+      }
+      .intro-row { display: block; }
+      /* Match the introduction typography to the body text elsewhere on the page. */
+      .intro-row .lead {
+        min-width: 0;
+        font-size: 1rem !important;
+        line-height: 1.6;
+      }
+      .intro-row .lead p,
+      .intro-row .lead li {
+        font-size: inherit !important;
+        line-height: 1.6;
+      }
+      /* Keep natural word spacing in the biography, even if global.css justifies text. */
+      .hero-copy .intro-row .lead,
+      .hero-copy .intro-row .lead p,
+      .hero-copy .intro-row .lead li,
+      .hero-copy .intro-row .lead strong,
+      .hero-copy .intro-row .lead em {
+        text-align: left !important;
+        text-align-last: auto !important;
+        word-spacing: normal !important;
+        letter-spacing: normal !important;
+        white-space: normal !important;
+      }
+      .hero-copy .intro-row .lead p,
+      .hero-copy .intro-row .lead li {
+        hyphens: none;
+        overflow-wrap: normal;
+        word-break: normal;
+      }
+
+      @media (max-width: 650px) {
+        .hero-copy { grid-template-columns: minmax(0, 1fr) 130px; gap: 0 1rem; }
+        .hero-copy > .profile-photo { width: 130px !important; }
+      }
+      @media (max-width: 440px) {
+        .hero-copy { grid-template-columns: minmax(0, 1fr) 105px; column-gap: .75rem; }
+        .hero-copy > .profile-photo { width: 105px !important; }
+      }
+      /* Compact publication citations under each research project. */
+      .research-papers {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 1rem;
+        row-gap: .35rem;
+        margin-top: .55rem;
+        font-size: .88rem;
+        line-height: 1.55;
+      }
+      .research-papers-label {
+        color: var(--portfolio-muted);
+        font-weight: 600;
+      }
+      .research-papers a {
+        color: var(--portfolio-link) !important;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .research-papers a:hover { text-decoration-thickness: 2px; }
+
+      /* Subtle architectural background: quiet grid + diffused color, no image assets. */
+      :root {
+        --site-glow-one: rgba(104, 150, 196, .13);
+        --site-glow-two: rgba(163, 174, 207, .10);
+        --site-grid: rgba(66, 92, 125, .035);
+        --site-header-glass: rgba(255, 255, 255, .90);
+      }
+      :root[data-theme="dark"] {
+        --site-glow-one: rgba(86, 121, 163, .16);
+        --site-glow-two: rgba(132, 115, 149, .12);
+        --site-grid: rgba(208, 215, 225, .035);
+        --site-header-glass: rgba(24, 26, 29, .90);
+      }
+      body {
+        background-color: var(--portfolio-bg) !important;
+        background-image:
+          radial-gradient(ellipse 75% 45% at 88% 3%, var(--site-glow-one), transparent 78%),
+          radial-gradient(ellipse 65% 40% at 0% 53%, var(--site-glow-two), transparent 78%),
+          linear-gradient(to right, var(--site-grid) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--site-grid) 1px, transparent 1px) !important;
+        background-size: auto, auto, 52px 52px, 52px 52px;
+        background-attachment: fixed;
+      }
+      /* Avoid opaque section backgrounds hiding the canvas. */
+      main, main section, footer { background-color: transparent !important; }
+      header {
+        background-color: var(--site-header-glass) !important;
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+      }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Header and navigation -->
+    <header>
+      <div class="wrapper nav">
+
+        <nav class="navlinks portfolio-tabs" aria-label="Portfolio sections">
+          <a href="#news">News</a>
+          <a href="#research">Research</a>
+          <a href="#publications">Publications</a>
+          <a href="#awards">Awards</a>
+          <a href="#teaching">Teaching &amp; Mentorship</a>
+          <a href="#talks">Invited Talks</a>
+          <a href="#service">Academic Service</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">☾ Dark</button>
+
+      </div>
+    </header>
+
+
+    <main id="top">
+
+      <!-- Introduction -->
+      <div class="wrapper hero">
+
+        <div class="hero-copy">
+
+          <h1 style="font-size: 32px; white-space: nowrap;">
+            Ayatallah (Aya) Elakhras
+          </h1>
+
+          <div class="links">
+
+            <a href="mailto:ayaelakhras@gmail.com">
+              Email
+            </a>
+
+            <a href="https://scholar.google.com/citations?user=6Jo1OrgAAAAJ&hl=en">
+              Google Scholar
+            </a>
+
+            <a href="https://github.com/AyaElAkhras">
+              GitHub
+            </a>
+
+            <a href="https://www.linkedin.com/in/aya-elakhras/">
+              LinkedIn
+            </a>
+
+            <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">
+              CV
+            </a>
+          </div>
+
+           <figure class="profile-photo">
+                      <img
+                        src="/profile.jpeg"
+                        alt="Ayatallah (Aya) Elakhras"
+                      />
+                    </figure>
+
+
+          <div class="eyebrow">
+            AI for Hardware Design · High-Level Synthesis · Computer Architecture 
+          </div>
+
+         <div class="intro-row">
+          <div class="lead">
+
+            <p>
+              I am currently a <strong>Senior Researcher at Huawei Research Center in Zürich</strong>,
+              working on next-generation <strong>Neural Processing Units (NPUs)</strong>.
+              My research interests span computer architecture, compilers,
+              and hardware generation.
+            </p>
+
+            <p>
+              I completed my <strong>Ph.D. in Computer and Communication Sciences at EPFL</strong> in 2026, advised
+              by Prof. Paolo Ienne (EPFL) and Prof. Lana Josipović (ETH Zürich).
+              My doctoral research brought concepts from
+              <strong> out-of-order superscalar processors</strong> into
+              <strong> dynamically scheduled high-level synthesis (HLS) </strong>
+              to exploit parallelism in dataflow circuits generated from sequential programs.
+            </p>
+
+            <p>
+              In 2023, I began a <strong>six-month research internship at AMD </strong>
+               in Longmont, Colorado, under the supervision of Dr. Kristof Denolf,
+              working on architecture-aware scheduling and design space exploration
+              for mapping neural networks onto AMD AI Engines.
+            </p>
+
+            <p>
+              I earned my <strong>B.Sc. in Computer Engineering in 2020</strong> from the
+               <strong> American University in Cairo</strong>,
+              graduating <strong><em>summa cum laude</em></strong> and started my Ph.D. in the same year.
+            </p>
+
+          </div>
+        </div>
+        </div>
+
+      </div>
+
+
+      <!-- News -->
+      <section id="news">
+
+        <div class="wrapper section-grid">
+
+          <h2>News</h2>
+
+          <div class="news">
+
+            {news.map((item) => (
+
+              <div class="news-row">
+
+                <div class="news-date">
+                  {item.date}
+                </div>
+
+                <div class="news-content">
+
+                  <div class="news-text">
+
+                    {item.heading && (
+                      <strong class="news-heading">
+                        {item.heading}
+                      </strong>
+                    )}
+
+                    <span>{item.text}</span>
+
+                  </div>
+
+                  {item.links.length > 0 && (
+
+                    <div class="news-links">
+
+                      {item.links.map((link) => (
+
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="news-link"
+                        >
+                          {link.label} ↗
+                        </a>
+
+                      ))}
+
+                    </div>
+
+                  )}
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Research -->
+      <section id="research">
+        <div class="wrapper section-grid">
+          <h2>Research</h2>
+          <div class="items research-projects">
+            <article class="item">
+              <h3>Instruction-level parallelism in dataflow circuits</h3>
+              <p class="muted">
+                Exploiting <strong>control dependence</strong> to deliver data tokens earlier
+                and enable more aggressive <strong>out-of-order execution</strong> in
+                dynamically scheduled circuits generated from sequential programs.
+              </p>
+              <div class="research-papers" aria-label="Related publications">
+                <span class="research-papers-label">Related papers</span>
+                <a href={publications[5].url} target="_blank" rel="noopener noreferrer">FPL ’22 · Fast Token Delivery ↗</a>
+                <a href={publications[3].url} target="_blank" rel="noopener noreferrer">FPGA ’24 · Survival of the Fastest ↗</a>
+              </div>
+            </article>
+
+            <article class="item">
+              <h3>Memory-level parallelism and access reordering</h3>
+              <p class="muted">
+                Designing lightweight interfaces to spatial load-store queues
+                and custom memory-reordering circuits that expose
+                <strong>memory-level parallelism</strong> without relying on conventional
+                centralized load-store queues.
+              </p>
+              <div class="research-papers" aria-label="Related publications">
+                <span class="research-papers-label">Related papers</span>
+                <a href={publications[4].url} target="_blank" rel="noopener noreferrer">FPGA ’23 · Straight to the Queue ↗</a>
+                <a href={publications[1].url} target="_blank" rel="noopener noreferrer">FPGA ’26 · Out with LSQs ↗</a>
+              </div>
+            </article>
+
+            <article class="item">
+              <h3>Fine-grained out-of-order execution</h3>
+              <p class="muted">
+                Introducing <strong>tagging mechanisms</strong> and circuit transformations
+                that enable multiple independent execution contexts to progress
+                simultaneously, bringing <strong>multithreading</strong> to dataflow circuits.
+              </p>
+              <div class="research-papers" aria-label="Related publications">
+                <span class="research-papers-label">Related paper</span>
+                <a href={publications[3].url} target="_blank" rel="noopener noreferrer">FPGA ’24 · Survival of the Fastest ↗</a>
+              </div>
+            </article>
+
+            <article class="item">
+              <h3>Formal verification of dataflow circuits</h3>
+              <p class="muted">
+                Collaborating with researchers at EPFL and ETH Zürich to establish
+                the correctness of circuit transformations and out-of-order execution
+                techniques through <strong>model checking</strong> and
+                <strong>Lean-based formal proofs</strong>.
+              </p>
+              <div class="research-papers" aria-label="Related publications">
+                <span class="research-papers-label">Related papers</span>
+                <a href={publications[2].url} target="_blank" rel="noopener noreferrer">ASPLOS ’25 · ElasticMiter ↗</a>
+                <a href={publications[0].url} target="_blank" rel="noopener noreferrer">ASPLOS ’26 · Graphiti ↗</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Publications -->
+      <section id="publications">
+        <div class="wrapper section-grid">
+          <h2>Publications</h2>
+          <div class="items">
+            {publications.map((pub) => (
+              <article class="item">
+                <div class="item-meta">{pub.year} · {pub.venue}</div>
+                <h3>{pub.title}</h3>
+                <p class="muted">{pub.authors}</p>
+                {pub.recognition && <p class="muted"><strong>{pub.recognition}</strong></p>}
+                <div class="news-links">
+                  <a class="news-link" href={pub.url} target="_blank" rel="noopener noreferrer">Paper ↗</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- Awards -->
+      <section id="awards">
+        <div class="wrapper section-grid">
+          <h2>Honors &amp; Awards</h2>
+          <div class="items">
+            <article class="item">
+              <div class="item-meta">2026</div>
+              <h3>Best Paper Honorable Mention · ASPLOS’26</h3>
+              <p class="muted">Graphiti: Formally Verified Out-of-Order Execution in Dataflow Circuits.</p>
+            </article>
+            <article class="item">
+              <div class="item-meta">2026</div>
+              <h3>Best Paper Award Runner-up · FPGA’26</h3>
+              <p class="muted">Out with LSQs: Custom Circuits for Memory Access Reordering in Dynamic HLS.</p>
+            </article>
+            <article class="item">
+              <div class="item-meta">2024</div>
+              <h3>Google Ph.D. Fellowship</h3>
+              <p class="muted">Awarded for exceptional Ph.D. research in Distributed Systems and Parallel Computing.</p>
+            </article>
+            <article class="item">
+              <div class="item-meta">2022</div>
+              <h3>Best Paper Award Nominee · FPL’22</h3>
+              <p class="muted">Unleashing Parallelism in Elastic Circuits with Faster Token Delivery.</p>
+            </article>
+            <article class="item">
+              <div class="item-meta">2020</div>
+              <h3>EDIC Fellowship · EPFL</h3>
+              <p class="muted">Awarded by EPFL's School of Computer and Communication Sciences to incoming Ph.D. students with an exceptional academic record.</p>
+            </article>
+            <article class="item">
+              <div class="item-meta">2020</div>
+              <h3>Summa Cum Laude · American University in Cairo</h3>
+              <p class="muted">Graduated with honors with a B.Sc. in Computer Engineering.</p>
+            </article>
+            <article class="item">
+              <div class="item-meta">2018 &amp; 2019</div>
+              <h3>Outstanding Academic Achievers’ Honors Assembly · American University in Cairo</h3>
+              <p class="muted">Recognized for academic achievement.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Teaching & mentorship -->
+      <section id="teaching">
+        <div class="wrapper section-grid">
+          <h2>Teaching &amp; Mentorship</h2>
+          <div class="items">
+            <article class="item">
+              <h3>Teaching assistance · EPFL</h3>
+              <div class="item-meta">2021–2025 · Computer Architecture I and II</div>
+              <p class="muted">Guided more than 200 bachelor's students through VHDL, Verilog, Nios II, and RISC-V assembly labs; co-designed midterm and final examinations.</p>
+            </article>
+            <article class="item">
+              <h3>Teaching assistance · American University in Cairo</h3>
+              <div class="item-meta">2018 · Computer Organization and Assembly Language Programming</div>
+              <p class="muted">Delivered tutorials introducing bachelor's students to MIPS assembly language.</p>
+            </article>
+            <h3>Project supervision at EPFL</h3>
+            {studentProjects.map((project) => (
+              <article class="item">
+                <div class="item-meta">{project.period} · {project.role}</div>
+                <h3>{project.name}</h3>
+                <p class="muted">{project.detail}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- Invited Talks -->
+      <section id="talks">
+        <div class="wrapper section-grid">
+          <h2>Invited Talks</h2>
+          <div class="items">
+            {talks.map((talk) => (
+              <article class="item">
+                <div class="item-meta">{talk.date} · {talk.venue}</div>
+                <h3>{talk.title}</h3>
+                {talk.links.filter((link) => !link.draft).length > 0 && (
+                  <div class="news-links">
+                    {talk.links.filter((link) => !link.draft).map((link) => (
+                      <a class="news-link" href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>
+                    ))}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- Academic service -->
+      <section id="service">
+        <div class="wrapper section-grid">
+          <h2>Academic Service</h2>
+          <div class="items">
+            <article class="item">
+              <h3>EPFL doctoral admissions prefiltering committee</h3>
+              <p class="muted">Evaluated doctoral applicants to EPFL's Ph.D. program.</p>
+            </article>
+            <article class="item">
+              <h3>Ph.D. application mentoring · EPFL</h3>
+              <p class="muted">Supported prospective doctoral applicants by reviewing their application materials.</p>
+            </article>
+            <article class="item">
+              <h3>Primary reviewer · Journals</h3>
+              <p class="muted">ACM Transactions on Design Automation of Electronic Systems (TODAES); IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems (TCAD).</p>
+            </article>
+            <article class="item">
+              <h3>Secondary reviewer · Conferences</h3>
+              <p class="muted">ACM/IEEE International Conference on Computer-Aided Design (ICCAD); ACM International Symposium on Field-Programmable Gate Arrays (FPGA); IEEE International Conference on Field-Programmable Logic and Applications (FPL); IEEE Symposium on Field-Programmable Custom Computing Machines (FCCM).</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact">
+
+        <div class="wrapper section-grid">
+
+          <h2>Contact</h2>
+
+          <div>
+
+            <p>
+              The easiest way to reach me is by email.
+            </p>
+
+            <p>
+              <a href="mailto:ayaelakhras@gmail.com">
+                ayaelakhras@gmail.com
+              </a>
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+      <div class="wrapper" style="text-align: center;">
+        © {new Date().getFullYear()} Ayatallah Elakhras.
+        Last updated {formattedDate}.
+        Built with Astro.
+      </div>
+
+    </footer>
+
+
+    <script is:inline>
+      (() => {
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function refreshToggle() {
+          const dark = document.documentElement.dataset.theme === 'dark';
+          themeToggle.textContent = dark ? '☀ Light' : '☾ Dark';
+          themeToggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+          themeToggle.setAttribute('aria-pressed', String(dark));
+        }
+        themeToggle.addEventListener('click', () => {
+          const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem('portfolio-theme', next); } catch {}
+          refreshToggle();
+        });
+        refreshToggle();
+      })();
+    </script>
+  </body>
+
+</html>
