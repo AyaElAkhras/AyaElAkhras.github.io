@@ -282,8 +282,8 @@ const news = [
 
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Ayatallah (Aya) Elakhras · Computer Architecture Researcher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ayatallah Elakhras</title>
     <meta
       name="description"
       content="Ayatallah (Aya) Elakhras is a Senior Researcher at Huawei Research Center in Zürich and an EPFL Ph.D. graduate working on computer architecture, high-level synthesis, and dataflow circuits."
@@ -293,7 +293,7 @@ const news = [
 
     <!-- Preview metadata for sharing this site on LinkedIn and other platforms. -->
     <meta property="og:type" content="profile" />
-    <meta property="og:title" content="Ayatallah (Aya) Elakhras · Computer Architecture Researcher" />
+    <meta property="og:title" content="Ayatallah Elakhras" />
     <meta property="og:description" content="Research in computer architecture, high-level synthesis, and dataflow circuits. Senior Researcher at Huawei Research Center in Zürich; Ph.D. from EPFL." />
     <meta property="og:url" content="https://ayaelakhras.github.io/" />
     <meta property="og:image" content="https://ayaelakhras.github.io/profile.jpeg" />
@@ -434,11 +434,16 @@ const news = [
       .research-highlights { list-style: disc; padding-left: 1.4rem; margin: .8rem 0 1.2rem; }
       .research-highlights li { margin-bottom: .65rem; line-height: 1.65; }
       :root[data-theme="dark"] .research-highlights { color: #d0d1d3; }
-      .hero-copy h1 { font-size: clamp(1.35rem, 3.5vw, 2.25rem) !important; }
+      /* The global h1 max-width (13ch) previously forced the surname to wrap. */
+      .hero-copy > h1 {
+        max-width: none;
+        white-space: nowrap;
+        font-size: clamp(1.35rem, 3.5vw, 2.25rem) !important;
+      }
       @media (max-width: 650px) {
         .nav .brand { width: 100%; }
         .portfolio-tabs button { padding: .45rem .55rem; }
-        .hero-copy h1 { white-space: normal !important; }
+
       }
 
       /* Continuous, scrollable page with anchor navigation. */
@@ -469,13 +474,15 @@ const news = [
         max-width: none;
         align-items: start;
       }
-      .hero-copy > h1 { grid-column: 1; grid-row: 1; min-width: 0; }
+      /* Give the full name the full content width; the portrait remains beside
+         the links and biography instead of squeezing the name into column 1. */
+      .hero-copy > h1 { grid-column: 1 / -1; grid-row: 1; min-width: 0; }
       .hero-copy > .links { grid-column: 1; grid-row: 2; min-width: 0; }
       .hero-copy > .eyebrow { grid-column: 1; grid-row: 3; min-width: 0; }
       .hero-copy > .intro-row { grid-column: 1; grid-row: 4; min-width: 0; }
       .hero-copy > .profile-photo {
         grid-column: 2;
-        grid-row: 1 / 5;
+        grid-row: 2 / 5;
         justify-self: end;
         align-self: start !important;
         width: 205px !important;
@@ -581,6 +588,98 @@ const news = [
         backdrop-filter: blur(14px);
       }
       @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+      /* Tablet and phone layout: keep the desktop two-column introduction intact. */
+      @media (max-width: 760px) {
+        html { scroll-padding-top: 1rem; }
+        section[id] { scroll-margin-top: 1rem; }
+        header { position: relative; } /* Avoid a tall sticky navigation covering content. */
+        .nav {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          gap: .65rem;
+          padding: .75rem 0;
+          min-height: auto;
+        }
+        .nav .portfolio-tabs {
+          flex: 0 0 auto;
+          display: flex;
+          flex-wrap: nowrap;
+          width: 100%;
+          min-width: 0;
+          gap: .25rem;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          scrollbar-width: thin;
+          padding-bottom: .35rem;
+        }
+        .portfolio-tabs a {
+          flex: 0 0 auto;
+          white-space: nowrap;
+          padding: .58rem .7rem;
+          font-size: .87rem;
+        }
+        .theme-toggle { align-self: flex-end; padding: .5rem .8rem; }
+        .hero { padding: 2.25rem 0 2.5rem; }
+        .hero-copy {
+          grid-template-columns: minmax(0, 1fr);
+          column-gap: 0;
+          row-gap: 0;
+          width: 100%;
+        }
+        .hero-copy > h1 {
+          grid-column: 1;
+          grid-row: 1;
+          max-width: none;
+          font-size: clamp(1.15rem, 5.4vw, 2rem) !important;
+          line-height: 1.16;
+          letter-spacing: -.035em;
+          white-space: nowrap !important;
+        }
+        .hero-copy > .links {
+          grid-column: 1;
+          grid-row: 2;
+          margin: .85rem 0 1.3rem;
+          gap: .5rem;
+        }
+        .links a { padding: .52rem .75rem; font-size: .9rem; }
+        .hero-copy > .profile-photo {
+          grid-column: 1;
+          grid-row: 3;
+          justify-self: start;
+          width: min(180px, 48vw) !important;
+          max-width: 100% !important;
+          margin: 0 0 1.2rem !important;
+        }
+        .hero-copy > .eyebrow {
+          grid-column: 1;
+          grid-row: 4;
+          font-size: .88rem;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+        .hero-copy > .intro-row { grid-column: 1; grid-row: 5; }
+        .intro-row .lead { max-width: none; }
+        section { padding: 2.25rem 0; }
+        .section-grid { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; }
+        .section-grid > * { min-width: 0; }
+        .items { gap: 1.45rem; }
+        .item { padding-bottom: 1.4rem; }
+        .news-row { grid-template-columns: minmax(0, 1fr); gap: .3rem; padding: 1rem 0; }
+        .news-date { font-size: .84rem; }
+        .news-content, .news-text, .item { min-width: 0; }
+        .news-text, .item p, .item h3 { overflow-wrap: anywhere; }
+        footer { padding: 2rem 0 2.75rem; }
+      }
+      @media (max-width: 420px) {
+        .hero { padding-top: 1.8rem; }
+        .hero-copy > h1 { font-size: clamp(1.05rem, 5.1vw, 1.35rem) !important; }
+        .hero-copy > .profile-photo { width: min(150px, 45vw) !important; }
+        .research-papers { gap: .35rem .75rem; }
+        .research-papers-label { flex-basis: 100%; }
+      }
     </style>
   </head>
 
@@ -613,7 +712,7 @@ const news = [
 
         <div class="hero-copy">
 
-          <h1 style="font-size: 32px; white-space: nowrap;">
+          <h1>
             Ayatallah (Aya) Elakhras
           </h1>
 

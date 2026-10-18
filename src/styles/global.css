@@ -204,3 +204,12 @@ footer { padding: 44px 0 64px; border-top: 1px solid var(--line); color: var(--m
   word-spacing: normal !important;
   letter-spacing: normal !important;
 }
+
+/* Safe sizing for narrow viewports and long links. */
+img { max-width: 100%; }
+main, .wrapper, .section-grid, .items { min-width: 0; }
+@media (max-width: 760px) {
+  .wrapper { width: calc(100% - 32px); }
+  .news-links { gap: 7px; }
+  .news-link { min-height: 36px; }
+}
